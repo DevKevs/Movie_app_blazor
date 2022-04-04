@@ -1,0 +1,41 @@
+﻿@page "/Prestaciones"
+@using Movie_app.Shared
+@using Movie_app.Shared.Models;
+@using Newtonsoft.Json
+@inject HttpClient Http
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>Tus Prestaciones</h3>
+        </div>
+        <div class="card-body">
+            @if (prestamo == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" @ref="GridPrestamo" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+        Data="@prestamo" TItem="Prestamo" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="Prestamo" Property="IdPelicula" Title="Numeracion de la pelicula" Frozen="true" Width="140px" />
+            <RadzenDataGridColumn TItem="Prestamo" Property="Prestatario" Title="Prestatario" Width="140px"/>
+            <RadzenDataGridColumn TItem="Prestamo" Property="FechaPrestamo" Title="Fecha de prestamo" Width="140px"/>
+        </Columns>
+    </RadzenDataGrid>
+               
+            }
+
+        </div>
+    </div>
+</div>
+
+@code {
+     List<Prestamo> prestamo;
+     RadzenDataGrid<Prestamo> GridPrestamo;
+
+     protected override async Task OnInitializedAsync()
+    {
+        prestamo = await Http.GetFromJsonAsync<List<Prestamo>>("api/Prestamos");
+    }
+}

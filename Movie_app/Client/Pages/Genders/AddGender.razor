@@ -1,0 +1,236 @@
+﻿@page "/AddGender"
+@using Movie_app.Shared
+@using Movie_app.Shared.Models;
+@using Newtonsoft.Json
+@inject HttpClient Http
+
+<div class="container"> 
+    <button class="btn btn-success mb-3" data-toggle="modal" data-target="#exampleModal" @onclick="@(() => response = null)"><i class="fas fa-plus"></i> Agregar Genero</button>
+    <div class="card">
+        <div class="card-header">
+            <h3>Tus generos</h3>
+        </div>
+        <div class="card-body">
+            @if (gender == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" @ref="GridGenders" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+        Data="@gender" TItem="Genero" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="Genero" Property="Tipo" Title="Nombre de genero" Frozen="true" Width="140px" />
+            <RadzenDataGridColumn TItem="Genero" Property="Descripcion" Title="Descripcion" Width="140px"/>
+            <RadzenDataGridColumn TItem="Genero" Title="Opciones" Width="45px" Filterable=false>
+                
+                <Template Context="genero">
+                     <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" data-toggle="modal" data-target="#ModalEdit" Class="m-1" Click="@(args => FillEdit(genero))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" data-toggle="modal" data-target="#ModalDelete" Size="ButtonSize.Medium" Class="m-1" Click="@(args => fillDelete(genero))"  @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="genero">
+                     <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => FillEdit(genero))">
+                    </RadzenButton>
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium" Class="m-1" Click="@(args => fillDelete(genero))">
+                    </RadzenButton>
+                </EditTemplate>
+                
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+               
+            }
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar genero</h5>
+      </div>
+      <div class="modal-body">
+          <EditForm Model=genero1 OnValidSubmit=SendGender>
+              <DataAnnotationsValidator />
+                <label>Tipo de genero</label>
+                <InputText type="text" @bind-Value=genero1.Tipo class="form-control" placeholder="Tipo de genero"></InputText>
+                <ValidationMessage For= "@(() => genero1.Tipo)"/>
+                <label>Descipcion</label>
+                <InputTextArea type="text" @bind-Value=genero1.Descripcion class="form-control" placeholder="Descipcion del genero"></InputTextArea>
+                <ValidationMessage For= "@(() => genero1.Descripcion)"/>
+                     @if(response != null)
+                {
+                    if (response.ok)
+                    {
+                        <div class="alert alert-success mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                    else if (response.ok == false)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                }
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="@(() => response = null)" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                 </div>
+          </EditForm>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal editar-->
+<div class="modal fade" id="ModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar genero</h5>
+      </div>
+      <div class="modal-body">
+          <EditForm Model=genero1 OnValidSubmit=EditRow>
+              <DataAnnotationsValidator />
+                <label>Tipo de genero</label>
+                <InputText type="text" @bind-Value=genero1.Tipo class="form-control" placeholder="Tipo de genero"></InputText>
+                <ValidationMessage For= "@(() => genero1.Tipo)"/>
+                <label>Descipcion</label>
+                <InputTextArea type="text" @bind-Value=genero1.Descripcion class="form-control" placeholder="Descipcion del genero"></InputTextArea>
+                <ValidationMessage For= "@(() => genero1.Descripcion)"/>
+                    @if(response != null)
+                {
+                    if (response.ok)
+                    {
+                        <div class="alert alert-warning mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                    else if (response.ok == false)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                }
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="@(() => response = null)" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+                 </div>
+          </EditForm>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Eliminar-->
+<div class="modal fade" id="ModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar genero</h5>
+      </div>
+      <div class="modal-body">
+        <h2>Esta seguro que desea eliminar el genero @genero1.Tipo?</h2>
+                @if(response != null)
+                {
+                    if (response.ok)
+                    {
+                        <div class="alert alert-success mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                    else if (response.ok == false)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                }
+      </div>
+                
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" @onclick="@(() => response = null)" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger" @onclick="@(args => DeleteRow(genero1))">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@code {
+    List<Genero> gender;
+    RadzenDataGrid<Genero> GridGenders;
+    ResponseGender response;
+    Genero genero1 = new Genero();
+
+    protected override async Task OnInitializedAsync()
+    {
+        gender = await Http.GetFromJsonAsync<List<Genero>>("api/Generos");
+    }
+    public async Task DeleteRow(Genero genero)
+    {
+        gender.Remove(genero);
+
+        var responses = await Http.DeleteAsync($"api/Generos/{genero.Id}");
+
+        response = await responses.Content.ReadFromJsonAsync<ResponseGender>();
+        if (response.ok)
+        {
+            await GridGenders.Reload();
+            genero1 = new Genero();
+        }
+        
+    }
+    public void fillDelete(Genero genero)
+    {
+        genero1 = genero; 
+    }
+    public async Task EditRow()
+    {
+        string json = JsonConvert.SerializeObject(genero1);
+        StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var responses = await Http.PutAsync($"api/Generos/{genero1.Id}", httpContent);
+        response = await responses.Content.ReadFromJsonAsync<ResponseGender>();
+        
+        if (response.ok)
+        {
+            await _reload();
+            genero1 = new Genero();
+        }
+    }
+    public void FillEdit(Genero genero)
+    {
+       genero1 = genero;
+    }
+    public async Task SendGender()
+    {
+        string json = JsonConvert.SerializeObject(genero1);
+        StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var responses = await Http.PostAsync("api/Generos", httpContent);
+        response = await responses.Content.ReadFromJsonAsync<ResponseGender>();
+        if (response.ok)
+        {
+            await _reload();
+            genero1 = new Genero();
+        }
+    }
+    public async Task _reload()
+    {
+        gender = await Http.GetFromJsonAsync<List<Genero>>("api/Generos");
+        await GridGenders.Reload();
+    }
+    
+    public class ResponseGender
+    {
+        public string Message { get; set; }
+        public bool ok { get; set; }
+    }
+
+}

@@ -1,0 +1,45 @@
+﻿@page "/fetchdata"
+@using Movie_app.Shared
+@using Movie_app.Shared.Models;
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (gender == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var genders in gender)
+            {
+                <tr>
+                    <td>@genders.Id</td>
+                    <td>@genders.Tipo</td>
+                    <td>@genders.Descripcion</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Genero[] gender;
+
+    protected override async Task OnInitializedAsync()
+    {
+        gender = await Http.GetFromJsonAsync<Genero[]>("api/Generos");
+    }
+
+}

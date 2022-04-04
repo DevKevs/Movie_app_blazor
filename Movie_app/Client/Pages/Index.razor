@@ -1,0 +1,201 @@
+﻿@page "/"
+@using Movie_app.Shared
+@using Movie_app.Shared.Models;
+@using Newtonsoft.Json
+@inject HttpClient Http
+
+<style>
+    .contentt {
+            display: grid;
+            gap: 1rem;
+            grid-auto-rows: 34rem;
+            grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+                    }
+    .conten{
+        height: 375px;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .img{
+              
+       background-position: center;
+       background-repeat: no-repeat;
+       background-size: 100% 100%;
+       height: 350px;
+       border-top-left-radius: 5px;
+       border-top-right-radius: 5px;
+    }
+     .info{
+        padding: 15px;
+        border-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-top: solid 3px #45536b;
+     }
+     .tittle{
+         color: white;
+     }
+     span{
+         color: white;
+     }
+     label{
+         color: white;
+     }
+</style>
+@if (Movies != null)
+{
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Buscar"
+                   @bind="Buscar"
+                   @bind:event="oninput">
+            </div>
+        </div>
+         <div class="col-lg-3">
+             <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-danger" @onclick="@(() => filter("Prestada"))">Prestadas</button>
+              <button type="button" class="btn btn-success" @onclick="@(() => filter("En casa"))">En casa</button>
+              <button type="button" class="btn btn-primary" @onclick="limpiar"><i class="fas fa-broom"></i></button>
+            </div>
+        </div>
+    </div>
+   
+   <div class="contentt">
+       @foreach (var m in Movies)
+      {
+          if (!IsVisible(m))
+                continue;
+           <div class="conten">
+            <div class="rowf">
+                <div class="bg-success img" style="background-image: url(@m.Imagen);">
+                  
+                </div>
+                <div class="info" style="background-color: #006797;">
+                    <h2 class="tittle">@m.Titulo</h2>
+                    <span class="mr-3">@m.FechaSalida</span> 
+                        @if (m.Estado == "En casa")
+                        {
+                            <span style="color: green">Estado: @m.Estado</span>
+                        }
+                        else
+                        {
+                            <span style="color: red">Estado: @m.Estado</span>
+                        }
+                        <label class="d-block" for="">Puntuacion: @m.Puntuacion</label>
+                        @if (m.Estado == "En casa")
+                        {
+                            <button class="btn btn-secondary mt-3"  @onclick="@(() => Movie = m)" data-toggle="modal" data-target="#exampleModal">Prestar pelicula</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary mt-3" @onclick="@(() => Movie = m)" data-toggle="modal" data-target="#ModalDelete">Devolver pelicula</button>
+                        }
+                        
+                </div>
+
+                </div>
+        </div>
+      }
+    </div>
+
+
+}
+else
+{
+    <h3>Loading...</h3>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Prestar pelicula</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <EditForm Model=prestamo OnValidSubmit="Prestar">
+             <DataAnnotationsValidator />
+                <h5>Prestatario</h5>
+                <InputText type="text" @bind-Value=prestamo.Prestatario class="form-control" placeholder="Nombre del prestatario"></InputText>
+                <ValidationMessage For= "@(() => prestamo.Prestatario)"/>
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Prestar pelicula</button>
+                </div>
+        </EditForm>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Modal Eliminar-->
+<div class="modal fade" id="ModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Devolver pelicula</h5>
+      </div>
+      <div class="modal-body">
+        <h2>Esta seguro que desea devolver la pelicula @Movie.Titulo?</h2>    
+      </div>
+                
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger">Devolver</button>
+      </div>
+    </div>
+  </div>
+</div>
+@code{
+    List<Pelicula> Movies;
+    Pelicula Movie = new Pelicula();
+    List<Pelicula> MoviesFilter = new List<Pelicula>();
+    Prestamo prestamo = new Prestamo();
+    public string Buscar { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+        if (Movies != null)
+        {
+            foreach (var m in Movies)
+            {
+                MoviesFilter.Add(m);
+            }
+        }
+    }
+    public bool IsVisible(Pelicula _pelicula)
+    {
+        if (string.IsNullOrEmpty(Buscar))  
+            return true; 
+        if (_pelicula.Titulo.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
+            return true;
+        return false;
+    }
+    void filter(string busqueda)
+    {
+        Movies = MoviesFilter.Where(e => e.Estado == busqueda).Select(a => a).ToList();
+    }
+    void limpiar()
+    {
+        Movies = MoviesFilter;
+    }
+    //revisar
+    async Task Prestar()
+    {
+        prestamo.IdPelicula = Movie.Id;
+        string json = JsonConvert.SerializeObject(prestamo);
+        StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var responses = await Http.PostAsync("api/Prestamos/Prestar", httpContent);
+        await _reload();
+    }
+    async Task _reload()
+    {
+        Movies.Clear();
+        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+    }
+}

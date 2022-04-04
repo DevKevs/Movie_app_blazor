@@ -1,0 +1,15 @@
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\bin\Debug\net5.0\Movie_app.Shared.deps.json
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\bin\Debug\net5.0\Movie_app.Shared.dll
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\bin\Debug\net5.0\ref\Movie_app.Shared.dll
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\bin\Debug\net5.0\Movie_app.Shared.pdb
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.AssemblyInfoInputs.cache
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.AssemblyInfo.cs
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.csproj.CoreCompileInputs.cache
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.dll
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\ref\Movie_app.Shared.dll
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.pdb
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\bin\Debug\net5.0\Movie_app.Shared.runtimeconfig.json
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\bin\Debug\net5.0\Movie_app.Shared.runtimeconfig.dev.json
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.genruntimeconfig.cache
+D:\Kevin Backup\repos\Movie_app\Movie_app\Shared\obj\Debug\net5.0\Movie_app.Shared.csproj.AssemblyReference.cache
