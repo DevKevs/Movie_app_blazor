@@ -99,7 +99,10 @@
         </div>
       }
     </div>
-
+    @if (Movies.Count == 0)
+    {
+        <h1 style="text-align:center;">No hay peliculas para mostrar</h1>
+    }
 
 }
 else
@@ -286,7 +289,8 @@ else
     async Task _reload()
     {
         Movies.Clear();
-        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+       responseReader = await Http.GetFromJsonAsync<ResponseReader>("api/Peliculas/join");
+        Movies = responseReader._peliculas;
     }
     public class ResponsePrestamo
     {

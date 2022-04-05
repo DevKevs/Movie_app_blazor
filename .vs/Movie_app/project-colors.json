@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "7e055b22-c795-4784-a669-f95534f67d84": {
+      "ProjectGuid": "7e055b22-c795-4784-a669-f95534f67d84",
+      "DisplayName": "Movie_app.Client",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

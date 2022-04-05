@@ -23,9 +23,12 @@ else
             <RadzenDataGridColumn TItem="Prestamo" Property="FechaPrestamo" Title="Fecha de prestamo" Width="140px"/>
         </Columns>
     </RadzenDataGrid>
-               
+                 @if (prestamo.Count == 0)
+                {
+                    <h1 style="text-align:center;">No hay peliculas prestadas</h1>
+                }  
             }
-
+           
         </div>
     </div>
 </div>

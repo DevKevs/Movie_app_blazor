@@ -54,9 +54,12 @@ else
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
-               
+            @if (Movies.Count == 0)
+            {
+                <h1 style="text-align:center;">No hay peliculas para mostrar</h1>
+            }        
 }
-
+            
         </div>
     </div>
 </div>
