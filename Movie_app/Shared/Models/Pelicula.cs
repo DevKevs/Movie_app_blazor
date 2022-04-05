@@ -21,6 +21,7 @@ namespace Movie_app.Shared.Models
         public string Puntuacion { get; set; }
         public string Imagen { get; set; }
         public string Estado { get; set; }
+        public string? Tipo { get; set; }
 
         public virtual Genero IdGeneroNavigation { get; set; }
         public virtual Prestamo Prestamo { get; set; }

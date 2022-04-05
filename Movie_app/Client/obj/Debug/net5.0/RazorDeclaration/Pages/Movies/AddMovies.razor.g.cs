@@ -134,10 +134,12 @@ using Newtonsoft.Json;
     RadzenDataGrid<Pelicula> GridMovies;
     Pelicula Movie = new Pelicula();
     ResponseMovie response;
+    private ResponseReader responseReader;
 
     protected override async Task OnInitializedAsync()
     {
-        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+        responseReader = await Http.GetFromJsonAsync<ResponseReader>("api/Peliculas/join");
+        Movies = responseReader._peliculas;
         gender = await Http.GetFromJsonAsync<List<Genero>>("api/Generos");
     }
     void OnChange(DateTime? value, string format)
@@ -185,7 +187,8 @@ using Newtonsoft.Json;
     }
     public async Task _reload()
     {
-        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+        responseReader = await Http.GetFromJsonAsync<ResponseReader>("api/Peliculas/join");
+        Movies = responseReader._peliculas;
         await GridMovies.Reload();
     }
     public void FillData(Pelicula _pelicula)
@@ -206,7 +209,11 @@ using Newtonsoft.Json;
         }
         
     }
-    
+    public class ResponseReader
+     {
+            public List<Pelicula> _peliculas { get; set; }
+            public bool ok { get; set; }
+     }
 
 #line default
 #line hidden

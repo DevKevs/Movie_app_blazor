@@ -75,22 +75,12 @@ namespace Movie_app.Server.Controllers
 
             return NoContent();
         }
-
-        //// POST: api/Prestamos
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Prestamo>> PostPrestamo(Prestamo prestamo)
-        //{
-        //    _context.Prestamos.Add(prestamo);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetPrestamo", new { id = prestamo.Id }, prestamo);
-        //}
+        
 
         // POST: api/Prestamos/Prestar
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("Prestar")]
-        public async Task<ActionResult<Prestamo>> PostPrestarPelicula(Prestamo prestamo)
+        public async Task<ActionResult<ResponsePrestamo>> PostPrestarPelicula(Prestamo prestamo)
         {
             try
             {
@@ -99,16 +89,56 @@ namespace Movie_app.Server.Controllers
                     using (SqlCommand cmd = new SqlCommand($"exec Prestar_Pelicula {prestamo.IdPelicula}, '{prestamo.Prestatario}'", sql))
                     {
                         await sql.OpenAsync();
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                
+                            }
+                        }
                     }
 
                 }
+                return new ResponsePrestamo() { Message = "Pelicula prestada", ok = true };
+
             }
             catch (Exception)
             {
 
-                throw;
+                return new ResponsePrestamo() { Message = "No se pudo prestar", ok = false };
             }
-            return null;
+        }
+
+        // POST: api/Prestamos/Devolver
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("Devolver")]
+        public async Task<ActionResult<ResponsePrestamo>> PostDevolverPelicula(Prestamo prestamo)
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand($"exec Devolver_Pelicula {prestamo.IdPelicula}", sql))
+                    {
+                        await sql.OpenAsync();
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+
+                            }
+                        }
+                    }
+
+                }
+                return new ResponsePrestamo() { Message = "Pelicula devuelta", ok = true };
+
+            }
+            catch (Exception)
+            {
+
+                return new ResponsePrestamo() { Message = "No se pudo devolver", ok = false };
+            }
         }
 
         // DELETE: api/Prestamos/5
@@ -131,5 +161,10 @@ namespace Movie_app.Server.Controllers
         {
             return _context.Prestamos.Any(e => e.Id == id);
         }
+    }
+    public class ResponsePrestamo
+    {
+        public string Message { get; set; }
+        public bool ok { get; set; }
     }
 }

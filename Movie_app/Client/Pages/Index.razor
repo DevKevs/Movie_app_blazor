@@ -53,7 +53,7 @@
             </div>
         </div>
          <div class="col-lg-3">
-             <div class="btn-group" role="group" aria-label="Basic example">
+             <div class="btn-group" role="group" aria-label="Basic example" style="z-index:1;">
               <button type="button" class="btn btn-danger" @onclick="@(() => filter("Prestada"))">Prestadas</button>
               <button type="button" class="btn btn-success" @onclick="@(() => filter("En casa"))">En casa</button>
               <button type="button" class="btn btn-primary" @onclick="limpiar"><i class="fas fa-broom"></i></button>
@@ -82,7 +82,8 @@
                         {
                             <span style="color: red">Estado: @m.Estado</span>
                         }
-                        <label class="d-block" for="">Puntuacion: @m.Puntuacion</label>
+                        <label class="d-block" for="">Puntuacion: @m.Puntuacion | @m.Tipo</label>
+                        <a @onclick="@(() => Movie = m)" style="display:block; text-decoration: none; color: white;" data-toggle="modal" data-target="#ModalInfo" href="#" class="mt-2">Ver mas...</a>
                         @if (m.Estado == "En casa")
                         {
                             <button class="btn btn-secondary mt-3"  @onclick="@(() => Movie = m)" data-toggle="modal" data-target="#exampleModal">Prestar pelicula</button>
@@ -122,11 +123,27 @@ else
                 <h5>Prestatario</h5>
                 <InputText type="text" @bind-Value=prestamo.Prestatario class="form-control" placeholder="Nombre del prestatario"></InputText>
                 <ValidationMessage For= "@(() => prestamo.Prestatario)"/>
+                @if(response != null)
+                {
+                    if (response.ok)
+                    {
+                        <div class="alert alert-success mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                    else if (response.ok == false)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                }
                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="@(() => response = null)" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Prestar pelicula</button>
                 </div>
         </EditForm>
+        
       </div>
       
     </div>
@@ -141,12 +158,57 @@ else
         <h5 class="modal-title" id="exampleModalLabel">Devolver pelicula</h5>
       </div>
       <div class="modal-body">
-        <h2>Esta seguro que desea devolver la pelicula @Movie.Titulo?</h2>    
+        <h2>Esta seguro que desea devolver la pelicula @Movie.Titulo?</h2>   
+        @if(response != null)
+                {
+                    if (response.ok)
+                    {
+                        <div class="alert alert-success mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                    else if (response.ok == false)
+                    {
+                        <div class="alert alert-danger mt-2" role="alert">
+                            @response.Message  
+                        </div>
+                    }
+                }   
       </div>
-                
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-danger">Devolver</button>
+        <button type="button" class="btn btn-secondary" @onclick="@(() => response = null)" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-danger" @onclick="Devolver">Devolver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal info-->
+<div class="modal fade" id="ModalInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Informacion de la pelicula</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: gray">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-4 img" style="background-image: url(@Movie.Imagen);">
+                
+            </div>
+            <div class="col">
+                <h2>@Movie.Titulo</h2>
+                <hr />
+                <p>@Movie.Sinopsis</p>
+                <h5>Puntuacion: @Movie.Puntuacion</h5>
+                <h5>Estado: @Movie.Estado</h5>
+                <h5>Genero: @Movie.Tipo</h5>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
       </div>
     </div>
   </div>
@@ -156,10 +218,13 @@ else
     Pelicula Movie = new Pelicula();
     List<Pelicula> MoviesFilter = new List<Pelicula>();
     Prestamo prestamo = new Prestamo();
+    ResponsePrestamo response;
+    private ResponseReader responseReader;
     public string Buscar { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+        responseReader = await Http.GetFromJsonAsync<ResponseReader>("api/Peliculas/join");
+        Movies = responseReader._peliculas;
         if (Movies != null)
         {
             foreach (var m in Movies)
@@ -174,6 +239,10 @@ else
             return true; 
         if (_pelicula.Titulo.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
             return true;
+        if (_pelicula.Tipo.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
+            return true;
+        if (_pelicula.Sinopsis.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
+            return true;
         return false;
     }
     void filter(string busqueda)
@@ -184,18 +253,49 @@ else
     {
         Movies = MoviesFilter;
     }
-    //revisar
+
     async Task Prestar()
     {
         prestamo.IdPelicula = Movie.Id;
         string json = JsonConvert.SerializeObject(prestamo);
         StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
         var responses = await Http.PostAsync("api/Prestamos/Prestar", httpContent);
-        await _reload();
+        response = await responses.Content.ReadFromJsonAsync<ResponsePrestamo>();
+        if (response.ok)
+        {
+            await _reload();
+            prestamo = new Prestamo();
+        }
+
+    }
+    async Task Devolver()
+    {
+        prestamo.IdPelicula = Movie.Id;
+        prestamo.Prestatario = "Un duro";
+        string json = JsonConvert.SerializeObject(prestamo);
+        StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var responses = await Http.PostAsync("api/Prestamos/Devolver", httpContent);
+        response = await responses.Content.ReadFromJsonAsync<ResponsePrestamo>();
+        if (response.ok)
+        {
+            await _reload();
+            prestamo = new Prestamo();
+        }
+        
     }
     async Task _reload()
     {
         Movies.Clear();
         Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
     }
+    public class ResponsePrestamo
+    {
+        public string Message { get; set; }
+        public bool ok { get; set; }
+    }
+     public class ResponseReader
+     {
+            public List<Pelicula> _peliculas { get; set; }
+            public bool ok { get; set; }
+     }
 }

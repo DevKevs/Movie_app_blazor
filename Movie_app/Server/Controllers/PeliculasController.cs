@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Movie_app.Shared.Models;
 
 namespace Movie_app.Server.Controllers
@@ -14,10 +16,13 @@ namespace Movie_app.Server.Controllers
     public class PeliculasController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private readonly string _connectionString;
+        private List<Pelicula> _movies = new List<Pelicula>();
 
-        public PeliculasController(MyDbContext context)
+        public PeliculasController(MyDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _connectionString = configuration["ConnectionStrings:MyConnection"];
         }
 
         // GET: api/Peliculas
@@ -25,6 +30,36 @@ namespace Movie_app.Server.Controllers
         public async Task<ActionResult<IEnumerable<Pelicula>>> GetPeliculas()
         {
             return await _context.Peliculas.ToListAsync();
+        }
+        // GET: api/Peliculas/join
+        [HttpGet("join")]
+        public async Task<ActionResult<ResponseReader>> GetJoinPeliculas()
+        {
+            try
+            {
+                using (SqlConnection sql = new SqlConnection(_connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand($"exec SP_Peliculas", sql))
+                    {
+                        await sql.OpenAsync();
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                _movies.Add(MovieReader(reader));
+                            }
+                        }
+                    }
+
+                }
+               
+                return new ResponseReader() { _peliculas = _movies, ok = true };
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+           
         }
 
         // GET: api/Peliculas/5
@@ -122,6 +157,25 @@ namespace Movie_app.Server.Controllers
         {
             public string Message { get; set; }
             public bool ok { get; set; }
+        }
+        public class ResponseReader
+        {
+            public List<Pelicula> _peliculas { get; set; }
+            public bool ok { get; set; }
+        }
+        private Pelicula MovieReader(SqlDataReader reader)
+        {
+            return new Pelicula() {
+                Id = (int)reader["Id"],
+                Titulo = reader["Titulo"].ToString(),
+                Sinopsis = reader["Sinopsis"].ToString(),
+                IdGenero = (int)reader["IdGenero"],
+                FechaSalida = reader["Fecha_salida"].ToString(),
+                Puntuacion = reader["Puntuacion"].ToString(),
+                Imagen = reader["Imagen"].ToString(),
+                Estado = reader["Estado"].ToString(),
+                Tipo = reader["Tipo"].ToString()
+            };
         }
     }
 }

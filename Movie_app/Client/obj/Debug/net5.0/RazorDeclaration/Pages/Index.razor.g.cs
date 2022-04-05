@@ -126,16 +126,19 @@ using Newtonsoft.Json;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 154 "D:\Kevin Backup\repos\Movie_app\Movie_app\Client\Pages\Index.razor"
+#line 216 "D:\Kevin Backup\repos\Movie_app\Movie_app\Client\Pages\Index.razor"
       
     List<Pelicula> Movies;
     Pelicula Movie = new Pelicula();
     List<Pelicula> MoviesFilter = new List<Pelicula>();
     Prestamo prestamo = new Prestamo();
+    ResponsePrestamo response;
+    private ResponseReader responseReader;
     public string Buscar { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
+        responseReader = await Http.GetFromJsonAsync<ResponseReader>("api/Peliculas/join");
+        Movies = responseReader._peliculas;
         if (Movies != null)
         {
             foreach (var m in Movies)
@@ -150,6 +153,10 @@ using Newtonsoft.Json;
             return true; 
         if (_pelicula.Titulo.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
             return true;
+        if (_pelicula.Tipo.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
+            return true;
+        if (_pelicula.Sinopsis.ToString().Contains(Buscar, StringComparison.OrdinalIgnoreCase))  
+            return true;
         return false;
     }
     void filter(string busqueda)
@@ -160,19 +167,51 @@ using Newtonsoft.Json;
     {
         Movies = MoviesFilter;
     }
+
     async Task Prestar()
     {
         prestamo.IdPelicula = Movie.Id;
         string json = JsonConvert.SerializeObject(prestamo);
         StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
         var responses = await Http.PostAsync("api/Prestamos/Prestar", httpContent);
-        await _reload();
+        response = await responses.Content.ReadFromJsonAsync<ResponsePrestamo>();
+        if (response.ok)
+        {
+            await _reload();
+            prestamo = new Prestamo();
+        }
+
+    }
+    async Task Devolver()
+    {
+        prestamo.IdPelicula = Movie.Id;
+        prestamo.Prestatario = "Un duro";
+        string json = JsonConvert.SerializeObject(prestamo);
+        StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        var responses = await Http.PostAsync("api/Prestamos/Devolver", httpContent);
+        response = await responses.Content.ReadFromJsonAsync<ResponsePrestamo>();
+        if (response.ok)
+        {
+            await _reload();
+            prestamo = new Prestamo();
+        }
+        
     }
     async Task _reload()
     {
         Movies.Clear();
         Movies = await Http.GetFromJsonAsync<List<Pelicula>>("api/Peliculas");
     }
+    public class ResponsePrestamo
+    {
+        public string Message { get; set; }
+        public bool ok { get; set; }
+    }
+     public class ResponseReader
+     {
+            public List<Pelicula> _peliculas { get; set; }
+            public bool ok { get; set; }
+     }
 
 #line default
 #line hidden
