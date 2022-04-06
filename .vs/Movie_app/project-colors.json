@@ -5,7 +5,17 @@
       "ProjectGuid": "7e055b22-c795-4784-a669-f95534f67d84",
       "DisplayName": "Movie_app.Client",
       "ColorIndex": 0
+    },
+    "64c7bf41-a60d-42e4-b866-5138f4f7d3ab": {
+      "ProjectGuid": "64c7bf41-a60d-42e4-b866-5138f4f7d3ab",
+      "DisplayName": "Movie_app.Server",
+      "ColorIndex": 1
+    },
+    "95cab90a-4b28-42e4-9096-56594114c103": {
+      "ProjectGuid": "95cab90a-4b28-42e4-9096-56594114c103",
+      "DisplayName": "Movie_app.Shared",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 3
 }

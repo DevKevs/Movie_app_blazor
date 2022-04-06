@@ -1419,8 +1419,6 @@ C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\ne
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\Eis8jqih.gz
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\8lYFrDRt.gz
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\S6J37cez.gz
-C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\psMaJpjs.gz
-C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\n0Gq0uyD.gz
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\scopedcss\bundle\Movie_app.Client.styles.css
@@ -1432,3 +1430,5 @@ C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\ne
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\Movie_app.Client.dll
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\ref\Movie_app.Client.dll
 C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\Movie_app.Client.pdb
+C:\Users\Kevin Feliz\Desktop\repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\AesM29+O.gz
+C:\Users\Kevin Feliz\Desktop\repo\Movie_app_blazor\Movie_app\Client\obj\Debug\net5.0\build-gz\rGcUydRy.gz

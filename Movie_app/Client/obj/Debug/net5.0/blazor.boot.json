@@ -220,15 +220,15 @@
       "mscorlib.dll": "sha256-0qsbc1acYr3S6P7t9gSYyghOhMVs3CTJ9ukQ1VXqksY=",
       "netstandard.dll": "sha256-4Ejn1oHpeqmTQlJx7Kjuipn0ZVOoG0hGncN+9qyL1lo=",
       "System.Private.CoreLib.dll": "sha256-7n\/jioZu+\/2tD7v1RgjTTrBrviX+kVwPFGJ\/JBsHQGA=",
-      "Movie_app.Shared.dll": "sha256-cgWI8Yo\/HQTybnML\/t5wu2o96FsL0xTE2epsOO9Wt5Y=",
-      "Movie_app.Client.dll": "sha256-1cm\/7g7XxEtCImaVvPeU9onBHOztc493iEOQu\/fERXc="
+      "Movie_app.Shared.dll": "sha256-E3r13fsFAVH0UKn\/YVgom+LUUy6f\/gbVvz5wnJnxVmY=",
+      "Movie_app.Client.dll": "sha256-FtCZIz8E\/kVPZ2YVYV\/8unyj0\/PDde4LqMY\/Pjgczc8="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "Movie_app.Shared.pdb": "sha256-htRh3J6kwgIzvsAr2HiPF1E2hRM+ycqh+HBWOszz2mo=",
-      "Movie_app.Client.pdb": "sha256-lLpi3TPSndP7cZ7xf40KaWbZueH8g9MmUtvAlJZY3Ko="
+      "Movie_app.Shared.pdb": "sha256-uio4D8se30xdPyzwE\/IMMnatup8KT+80vnlY7QRyNSc=",
+      "Movie_app.Client.pdb": "sha256-mY6EQ9wLHJ0PrsWYJoQxgjijseEydNImjMNm8vs5b54="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-Uv0JiOiPEvlGxygIhcdY8XYm\/Nt+zgVckKrqB2uih0w=",

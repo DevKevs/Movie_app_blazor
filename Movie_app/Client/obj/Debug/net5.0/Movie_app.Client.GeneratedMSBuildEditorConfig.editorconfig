@@ -10,4 +10,4 @@ build_property.EnableSingleFileAnalyzer =
 build_property.EnableTrimAnalyzer = true
 build_property.IncludeAllContentForSelfExtract = 
 build_property.RootNamespace = Movie_app.Client
-build_property.ProjectDir = C:\Users\Kevin Feliz\Desktop\Repo\Movie_app_blazor\Movie_app\Client\
+build_property.ProjectDir = C:\Users\Kevin Feliz\Desktop\repo\Movie_app_blazor\Movie_app\Client\

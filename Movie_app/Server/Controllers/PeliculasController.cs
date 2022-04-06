@@ -17,7 +17,7 @@ namespace Movie_app.Server.Controllers
     {
         private readonly MyDbContext _context;
         private readonly string _connectionString;
-        private List<Pelicula> _movies = new List<Pelicula>();
+        private List<Pelicula_repo> _movies = new List<Pelicula_repo>();
 
         public PeliculasController(MyDbContext context, IConfiguration configuration)
         {
@@ -160,12 +160,12 @@ namespace Movie_app.Server.Controllers
         }
         public class ResponseReader
         {
-            public List<Pelicula> _peliculas { get; set; }
+            public List<Pelicula_repo> _peliculas { get; set; }
             public bool ok { get; set; }
         }
-        private Pelicula MovieReader(SqlDataReader reader)
+        private Pelicula_repo MovieReader(SqlDataReader reader)
         {
-            return new Pelicula() {
+            return new Pelicula_repo() {
                 Id = (int)reader["Id"],
                 Titulo = reader["Titulo"].ToString(),
                 Sinopsis = reader["Sinopsis"].ToString(),

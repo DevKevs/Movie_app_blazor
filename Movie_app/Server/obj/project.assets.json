@@ -7985,11 +7985,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Server\\Movie_app.Server.csproj",
+      "projectUniqueName": "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Server\\Movie_app.Server.csproj",
       "projectName": "Movie_app.Server",
-      "projectPath": "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Server\\Movie_app.Server.csproj",
+      "projectPath": "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Server\\Movie_app.Server.csproj",
       "packagesPath": "C:\\Users\\Kevin Feliz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Server\\obj\\",
+      "outputPath": "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Kevin Feliz\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8006,11 +8006,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Client\\Movie_app.Client.csproj": {
-              "projectPath": "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Client\\Movie_app.Client.csproj"
+            "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Client\\Movie_app.Client.csproj": {
+              "projectPath": "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Client\\Movie_app.Client.csproj"
             },
-            "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Shared\\Movie_app.Shared.csproj": {
-              "projectPath": "C:\\Users\\Kevin Feliz\\Desktop\\Repo\\Movie_app_blazor\\Movie_app\\Shared\\Movie_app.Shared.csproj"
+            "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Shared\\Movie_app.Shared.csproj": {
+              "projectPath": "C:\\Users\\Kevin Feliz\\Desktop\\repo\\Movie_app_blazor\\Movie_app\\Shared\\Movie_app.Shared.csproj"
             }
           }
         }
